@@ -34,6 +34,10 @@ public class Master extends User {
     @ToString.Include
     private boolean isBusy;
 
+    @Column(name = "active_orders", columnDefinition = "number default = 0")
+    @ToString.Include
+    private int activeOrders;
+
     @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
             fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -47,5 +51,8 @@ public class Master extends User {
 
     @Getter
     private static Long MASTER_ROLE_ID = 2L;
+
+    @Getter
+    private static final double AMOUNT_FREE_FROM_FEE = 170.0;
 
 }

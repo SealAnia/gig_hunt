@@ -1,8 +1,10 @@
 package com.example.gig_hunt.service.impl;
 
+import com.example.gig_hunt.model.entity.Master;
 import com.example.gig_hunt.model.entity.OrderDetails;
 import com.example.gig_hunt.model.entity.OrderStatus;
 import com.example.gig_hunt.model.repository.OrderDetailsRepository;
+import com.example.gig_hunt.model.repository.UserRepository;
 import com.example.gig_hunt.service.OrderDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
         return orderDetailsRepository.getOrdersOfMaster(userId);
     }
 
+    //MASTER CHOOSES TO ACCEPT OR DECLINE AN ORDER
     @Override
     public OrderDetails acceptOrder(OrderDetails orderDetails) {
         if(orderDetails.getStatus().equals(OrderStatus.WAITING_FOR_REPLY)) {
@@ -57,8 +60,48 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
             orderDetails.setQuantity(orderDetails.getQuantity());
             orderDetails.setStatus(OrderStatus.IN_PROGRESS);
 
-            //ADD FIELD ACTIVE_ORDERS IN MASTER
+            //CHANGE FINDING MASTER BY AUTHENTICATION
 
+            Master master = orderDetails.getGoods().getMaster();
+            int activeOrders = master.getActiveOrders(); //3
+            int maximumOrders = master.getMaximum(); //4
+
+            activeOrders = activeOrders + 1;
+            if(activeOrders == maximumOrders) {
+                master.setBusy(true);
+            }
+            master.setActiveOrders(activeOrders);
+        }
+        return orderDetailsRepository.saveAndFlush(orderDetails);
+    }
+
+    @Override
+    public OrderDetails declineOrder(OrderDetails orderDetails) {
+        if(orderDetails.getStatus().equals(OrderStatus.WAITING_FOR_REPLY)) {
+            orderDetails.setDate(orderDetails.getDate());
+            orderDetails.setCustomer(orderDetails.getCustomer());
+            orderDetails.setGoods(orderDetails.getGoods());
+            orderDetails.setQuantity(orderDetails.getQuantity());
+            orderDetails.setStatus(OrderStatus.DECLINED);
+        }
+        return orderDetailsRepository.saveAndFlush(orderDetails);
+    }
+
+    //CUSTOMER SETS STATUS TO COMPLETED WHEN RECIEVES THE ORDER
+    @Override
+    public OrderDetails setOrderCompleted(OrderDetails orderDetails) {
+        if(orderDetails.getStatus().equals(OrderStatus.IN_PROGRESS)) {
+            orderDetails.setDate(orderDetails.getDate());
+            orderDetails.setCustomer(orderDetails.getCustomer());
+            orderDetails.setGoods(orderDetails.getGoods());
+            orderDetails.setQuantity(orderDetails.getQuantity());
+            orderDetails.setStatus(OrderStatus.COMPLETED);
+            Master master = orderDetails.getGoods().getMaster();
+            int activeOrders = orderDetails.getGoods().getMaster().getActiveOrders();
+            master.setActiveOrders(activeOrders - 1);
+            if(master.isBusy()) {
+                master.setBusy(false);
+            }
         }
         return orderDetailsRepository.saveAndFlush(orderDetails);
     }

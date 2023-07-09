@@ -8,7 +8,9 @@ import com.example.gig_hunt.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -81,6 +83,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public Double countEarnedAmount(Long masterId) {
         return userRepository.countEarnedAmount(masterId);
+    }
+
+    @Override
+    public String countEarnedAmountForMonth(Long masterId, String month) {
+        Master master = (Master) userRepository.findById(masterId).get();
+        Company company = master.getCompany();
+        if(userRepository.countEarnedAmountForMonth(masterId, month) > Master.getAMOUNT_FREE_FROM_FEE() && company == null) {
+            return String.valueOf(userRepository.countEarnedAmountForMonth(masterId, month)) +
+                    " You have earned more than " + Master.getAMOUNT_FREE_FROM_FEE()
+                    + ". Remember to the register the company.";
+        }
+        return String.valueOf(userRepository.countEarnedAmountForMonth(masterId, month));
     }
 
 }

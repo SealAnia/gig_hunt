@@ -51,12 +51,25 @@ public class OrderDetailsRestController {
         return ResponseEntity.ok(updatedOrder);
     }
 
-    //NEW
     @PutMapping(value = "/{orderId}/accept")
     public ResponseEntity<OrderDetails> acceptOrder(@PathVariable Long orderId, @RequestBody OrderDetails order) {
         OrderDetails orderToAccept = orderDetailsService.readById(orderId);
         orderDetailsService.acceptOrder(orderToAccept);
         return ResponseEntity.ok(orderToAccept);
+    }
+
+    @PutMapping(value = "/{orderId}/decline")
+    public ResponseEntity<OrderDetails> declineOrder(@PathVariable Long orderId, @RequestBody OrderDetails order) {
+        OrderDetails orderToDecline = orderDetailsService.readById(orderId);
+        orderDetailsService.declineOrder(orderToDecline);
+        return ResponseEntity.ok(orderToDecline);
+    }
+
+    @PutMapping(value = "/{orderId}/set_completed")
+    public ResponseEntity<OrderDetails> setOrderCompleted(@PathVariable Long orderId, @RequestBody OrderDetails order) {
+        OrderDetails orderToComplete = orderDetailsService.readById(orderId);
+        orderDetailsService.setOrderCompleted(orderToComplete);
+        return ResponseEntity.ok(orderToComplete);
     }
 
     @DeleteMapping(value = "/{orderId}")

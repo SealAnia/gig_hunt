@@ -3,9 +3,11 @@ package com.example.gig_hunt.controller;
 import com.example.gig_hunt.model.entity.*;
 import com.example.gig_hunt.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -47,10 +49,18 @@ public class UserRestController {
         return userService.findMastersInCategoryAndFromTown(categoryId, townId);
     }
 
+    //RETURNS TOTAL AMOUNT THAT A CERTAIN MASTER HAS EARNED
     @GetMapping(value = "/masters/amount")
     public Double countAmountForMaster(@RequestParam(value = "master_id") Long userId) {
         System.out.println(userService.countEarnedAmount(userId));
         return userService.countEarnedAmount(userId);
+    }
+
+    //RETURNS THE AMOUNT THAT A MASTER HAS EARNED IN A CERTAIN MONTH
+    @GetMapping(value = "/masters/amount_for_month")
+    public String countAmontEarnedInMonth(@RequestParam(value = "master_id") Long userId,
+                                          @RequestParam(value = "month") String month) {
+        return userService.countEarnedAmountForMonth(userId, month);
     }
 
     @PostMapping(value = "/add_admin")
