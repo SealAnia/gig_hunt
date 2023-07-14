@@ -4,6 +4,7 @@ import com.example.gig_hunt.exception.NumberOfSymbolsDifferentFromRequiredExcept
 import com.example.gig_hunt.model.entity.Card;
 import com.example.gig_hunt.model.repository.CardRepository;
 import com.example.gig_hunt.service.CardService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,20 @@ public class CardServiceImpl implements CardService {
     @Override
     public String checkTimeToCardExpiration(Long cardId) {
         return cardRepository.checkTimeToCardExpiration(cardId);
+    }
+
+    @Override
+    @Transactional
+    public void depositMoney(Long cardId, Double amount) {
+        Card card = cardRepository.findById(cardId).get();
+        card.setTotalAmount(card.getTotalAmount() + amount);
+    }
+
+    @Override
+    @Transactional
+    public void charge(Long cardId, Double amount) {
+        Card card = cardRepository.findById(cardId).get();
+        card.setTotalAmount(card.getTotalAmount() - amount);
     }
 
 }

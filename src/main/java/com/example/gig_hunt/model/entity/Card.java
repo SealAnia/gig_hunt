@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 @Entity
@@ -45,5 +46,8 @@ public class Card {
     @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     @ToString.Include
     private User user;
+
+    @Column(name = "total_amount", columnDefinition = "double default = 0.0", nullable = false)
+    private Double totalAmount;
 
 }

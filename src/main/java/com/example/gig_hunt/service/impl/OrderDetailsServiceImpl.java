@@ -15,10 +15,12 @@ import java.util.List;
 public class OrderDetailsServiceImpl implements OrderDetailsService {
 
     private final OrderDetailsRepository orderDetailsRepository;
+    private final PaymentServiceImpl paymentService;
 
     @Autowired
-    public OrderDetailsServiceImpl(OrderDetailsRepository orderDetailsRepository) {
+    public OrderDetailsServiceImpl(OrderDetailsRepository orderDetailsRepository, PaymentServiceImpl paymentService) {
         this.orderDetailsRepository = orderDetailsRepository;
+        this.paymentService = paymentService;
     }
 
     @Override
@@ -63,8 +65,8 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
             //CHANGE FINDING MASTER BY AUTHENTICATION
 
             Master master = orderDetails.getGoods().getMaster();
-            int activeOrders = master.getActiveOrders(); //3
-            int maximumOrders = master.getMaximum(); //4
+            int activeOrders = master.getActiveOrders();
+            int maximumOrders = master.getMaximum();
 
             activeOrders = activeOrders + 1;
             if(activeOrders == maximumOrders) {
@@ -103,6 +105,12 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
                 master.setBusy(false);
             }
         }
+
+        Long cardOfCustomerId = orderDetails.getCustomer().getCard().getCardId();
+        Long cardOfMasterId = orderDetails.getGoods().getMaster().getCard().getCardId();
+        Long orderId = orderDetails.getOrderId();
+        paymentService.pay(cardOfCustomerId, cardOfMasterId, orderId);
+
         return orderDetailsRepository.saveAndFlush(orderDetails);
     }
 
