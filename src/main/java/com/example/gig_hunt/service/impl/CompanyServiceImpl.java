@@ -47,7 +47,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company readByName(String name) {
+    public List<Company> readByName(String name) {
         return companyRepository.readByName(name);
     }
 

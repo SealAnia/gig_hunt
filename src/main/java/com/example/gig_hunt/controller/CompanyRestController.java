@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(value = "/companies")
 public class CompanyRestController {
@@ -25,24 +26,24 @@ public class CompanyRestController {
     }
 
     @GetMapping(value = "")
-    public List<Company> getAllCompanies() {
-        return companyService.getAll();
+    public ResponseEntity<List<Company>> getAllCompanies() {
+        return ResponseEntity.ok(companyService.getAll());
     }
 
     @GetMapping(value = "/{companyId}")
-    public Company getCompanyById(@PathVariable Long companyId) {
-        return companyService.readById(companyId);
+    public ResponseEntity<Company> getCompanyById(@PathVariable Long companyId) {
+        return ResponseEntity.ok(companyService.readById(companyId));
     }
 
-    //FINDS A COMPANY BY NAME
-    @GetMapping(value = "/name={name}")
-    public Company findCompanyByName(@PathVariable String name) {
-        return companyService.readByName(name);
+    //FINDS A LIST OF COMPANIES BY NAME
+    @GetMapping(value = "/by_name")
+    public ResponseEntity<List<Company>> findCompanyByName(@RequestParam String name) {
+        return ResponseEntity.ok(companyService.readByName(name));
     }
 
     //FINDS A COMPANY BY REGISTRATION NUMBER
     @GetMapping(value = "/number={registrationNumber}")
-    public Company findCompnyByRegistrationNumber(@PathVariable Long registrationNumber) {
+    public Company findCompanyByRegistrationNumber(@PathVariable Long registrationNumber) {
         return companyService.readByRegistrationNumber(registrationNumber);
     }
 

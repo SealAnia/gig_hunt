@@ -53,7 +53,6 @@ public abstract class User {
     protected List<OrderDetails> orders;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    //@PrimaryKeyJoinColumn
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ToString.Exclude
     private Card card;

@@ -25,8 +25,29 @@ public class Region {
     private String name;
 
     @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, orphanRemoval = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     @ToString.Exclude
     private List<Town> towns;
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Long.hashCode(regionId);
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
+    }
+
+    public boolean equals(Region region) {
+        if(region == this) {
+            return true;
+        }
+        if(region == null || region.getClass() != this.getClass()) {
+            return false;
+        }
+        Region regionTwo = (Region) region;
+        return regionId == region.regionId
+                && (name == regionTwo.name || (name != null && name.equals(regionTwo.name)));
+    }
 
 }

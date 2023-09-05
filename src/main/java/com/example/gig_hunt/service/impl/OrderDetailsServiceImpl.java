@@ -4,7 +4,6 @@ import com.example.gig_hunt.model.entity.Master;
 import com.example.gig_hunt.model.entity.OrderDetails;
 import com.example.gig_hunt.model.entity.OrderStatus;
 import com.example.gig_hunt.model.repository.OrderDetailsRepository;
-import com.example.gig_hunt.model.repository.UserRepository;
 import com.example.gig_hunt.service.OrderDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

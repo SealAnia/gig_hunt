@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigInteger;
 import java.util.Date;
 
 @Entity
@@ -19,7 +18,6 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "user_id")
     @ToString.Include
     private Long cardId;
 
@@ -41,7 +39,6 @@ public class Card {
     private Date validTo;
 
     @OneToOne
-    //@MapsId
     @JoinColumn(name = "user_id")
     @JsonProperty(access = JsonProperty.Access.READ_WRITE)
     @ToString.Include

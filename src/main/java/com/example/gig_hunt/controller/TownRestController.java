@@ -1,6 +1,8 @@
 package com.example.gig_hunt.controller;
 
+import com.example.gig_hunt.model.entity.Region;
 import com.example.gig_hunt.model.entity.Town;
+import com.example.gig_hunt.service.impl.RegionServiceImpl;
 import com.example.gig_hunt.service.impl.TownServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,25 +10,25 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(value = "/towns")
 public class TownRestController {
 
     private final TownServiceImpl townService;
-
     @Autowired
     public TownRestController(TownServiceImpl townService) {
         this.townService = townService;
     }
 
     @GetMapping(value = "")
-    public List<Town> getAllTowns() {
-        return townService.getAll();
+    public ResponseEntity<List<Town>> getAllTowns() {
+        return ResponseEntity.ok(townService.getAll());
     }
 
     @GetMapping(value = "/{townId}")
-    public Town getTownById(@PathVariable Long townId) {
-        return townService.readById(townId);
+    public ResponseEntity<Town> getTownById(@PathVariable Long townId) {
+        return ResponseEntity.ok(townService.readById(townId));
     }
 
     @PostMapping(value = "/")

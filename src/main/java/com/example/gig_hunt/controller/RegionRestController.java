@@ -3,11 +3,13 @@ package com.example.gig_hunt.controller;
 import com.example.gig_hunt.model.entity.Region;
 import com.example.gig_hunt.service.impl.RegionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(value = "/regions")
 public class RegionRestController {
@@ -20,18 +22,19 @@ public class RegionRestController {
     }
 
     @GetMapping(value = "")
-    public List<Region> getAllRegions() {
-        return regionService.getAll();
+    public ResponseEntity<List<Region>> getAllRegions() {
+        return ResponseEntity.ok(regionService.getAll());
     }
 
     @GetMapping(value = "/{regionId}")
-    public Region getRegionById(@PathVariable Long regionId) {
-        return regionService.readById(regionId);
+    public ResponseEntity<Region> getRegionById(@PathVariable Long regionId) {
+        return ResponseEntity.ok(regionService.readById(regionId));
     }
 
     @PostMapping(value = "/")
-    public void createRegion(@RequestBody Region region) {
+    public ResponseEntity<Region> createRegion(@RequestBody Region region) {
         regionService.createOrUpdate(region);
+        return new ResponseEntity<Region>(HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{regionId}")

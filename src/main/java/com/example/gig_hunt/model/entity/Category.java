@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Entity
@@ -36,5 +37,30 @@ public class Category {
     @JsonIgnore
     @ToString.Exclude
     private List<Master> users;
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Long.hashCode(categoryId);
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((comment == null) ? 0 : comment.hashCode());
+        result = prime * result + ((isAvailableOnline) ? 0 : 1);
+        return result;
+    }
+
+    public boolean equals(Category category) {
+        if(category == this) {
+            return true;
+        }
+        if(category == null || category.getClass() != this.getClass()) {
+            return false;
+        }
+        Category categoryTwo = (Category) category;
+        return categoryId == categoryTwo.categoryId
+                && (name == categoryTwo.name || (name != null && name.equals(categoryTwo.name)))
+                && (comment == categoryTwo.comment || (comment != null && comment.equals(categoryTwo.comment)))
+                && isAvailableOnline == categoryTwo.isAvailableOnline;
+    }
 
 }

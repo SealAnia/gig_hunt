@@ -52,6 +52,33 @@ public class OrderDetails {
     @Column(name = "order_status")
     private OrderStatus status;
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Long.hashCode(orderId);
+        result = prime * result + ((date == null) ? 0 : date.hashCode());
+        result = prime * result + quantity;
+        result = prime * result + ((cost == null) ? 0 : Double.hashCode(cost));
+        result = prime * result + ((status == null) ? 0 : status.hashCode());
+        return result;
+    }
+
+    public boolean equals(OrderDetails order) {
+        if(order == this) {
+            return true;
+        }
+        if(order == null || order.getClass() != this.getClass()) {
+            return false;
+        }
+        OrderDetails orderTwo = (OrderDetails) order;
+        return orderId == orderTwo.orderId
+                && (date == orderTwo.date || (date != null && date.equals(orderTwo.date)))
+                && quantity == orderTwo.quantity
+                && (cost == orderTwo.cost || (cost != null && cost.equals(orderTwo.cost)))
+                && (status == orderTwo.status || (status != null && status.equals(orderTwo.status)));
+    }
+
     @PrePersist
     public void logNewOrderDetailsAttempt() {
         log.info("Attempting to add new order with id: " + orderId);

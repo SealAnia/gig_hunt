@@ -3,15 +3,13 @@ package com.example.gig_hunt.controller;
 import com.example.gig_hunt.model.entity.*;
 import com.example.gig_hunt.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "users")
+@RequestMapping(value = "/users")
 public class UserRestController {
 
     private final UserServiceImpl userService;
